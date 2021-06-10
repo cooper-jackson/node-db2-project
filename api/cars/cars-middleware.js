@@ -27,6 +27,15 @@ exports.checkCarPayload = (req, res, next) => {
   if(!vin) {
     return next({status: 400, message: 'vin is missing'})
   }
+  else if(!make) {
+    return next({status: 400, message: 'make is missing'})
+  }
+  else if(!model) {
+    return next({status: 400, message: 'model is missing'})
+  }
+  else if(!mileage) {
+    return next({status: 400, message: 'mileage is missing'})
+  }
     // res.status(400).json({message: "vin is missing"})
     // next({status:400})
   // } else if (!make || make === 'undefined') {
@@ -55,13 +64,11 @@ exports.checkVinNumberValid = (req, res, next) => {
 exports.checkVinNumberUnique = async (req, res, next) => {
   // DO YOUR MAGIC
     const { vin } = req.body
-    const existingVin = await db('cars').where('vin', vin)
+    const existingVin = await db('cars').where('vin', vin).first()
 
     if(!existingVin) {
       next()
     } else {
       next({status: 400, message: `vin ${vin} already exists`})
     }
-
-  next()
 }
